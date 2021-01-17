@@ -33,8 +33,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import sportsDTO.SportDTO;
+import sportsDTO.SportTeamDTO;
 //Uncomment the line below, to temporarily disable this test
-//@Disabled
+@Disabled
 
 public class RenameMeResourceTest {
 
@@ -47,6 +48,7 @@ public class RenameMeResourceTest {
     private static EntityManagerFactory emf;
     private static EntityManager em;
     private static Sport sport, sport2, newSport;
+    private static SportTeam sportTeam1;
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -73,7 +75,7 @@ public class RenameMeResourceTest {
 
     MemberInfo memberInfo = new MemberInfo();
     Coach coach = new Coach("jens", "@jens", "55555");
-    SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
+    SportTeam sportTeam = new SportTeam(500, "u20", 15, 18);
     sport = new Sport("Fodbold", "sport med en bold");
     sport2 = new Sport("Håndbold", "mandesport");
     user.addMemberInfo(memberInfo);
@@ -105,7 +107,7 @@ public class RenameMeResourceTest {
     em.persist(user);
     em.persist(admin);
     em.persist(both);
-    em.persist(sport);
+   
     em.persist(sportTeam);
     em.getTransaction().commit();
     System.out.println("PW: " + user.getUserPass());
@@ -158,21 +160,37 @@ public class RenameMeResourceTest {
                 .body("msg", equalTo("Hello anonymous"));
     }
 
-//    @Test
-//    public void testGetAllSports() throws Exception {
-//        
-//        SportDTO sportDTO = new SportDTO(sport);
-//        SportDTO sportDTO2 = new SportDTO(sport2); 
-//        
-//        given()
-//                .contentType("application/json").when()
-//                .get("/sport/allsports").then()
-//                .statusCode(HttpStatus.OK_200.getStatusCode())
-//                .body("name", equalTo(sport.getName()));
-//      
-//    }
+    @Test
+    public void testGetAllSports() throws Exception {
+   
+        
+        given()
+                .contentType("application/json").when()
+                .get("/sport/allsports").then()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("name", contains(sport.getName(), newSport.getName()));
+      
+    }
     @Test
     public void testAddNewSport(){
+        sportTeam1 = new SportTeam(400, "u19", 16, 19);
+        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactoryForTest();
+        sportTeam1.addSport(sport);
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(sportTeam1);
+        em.getTransaction().commit();
+     
+            given()
+                .contentType("application/json")
+                .body(new SportTeamDTO(sportTeam1))
+                .when()
+                .post("/sport/addsportteam/")
+                .then();
+        
+    }
+    @Test
+    public void testAddSportTeam(){
         newSport = new Sport("gaming", "det sjovt");
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactoryForTest();
         EntityManager em = emf.createEntityManager();
@@ -188,6 +206,8 @@ public class RenameMeResourceTest {
                 .then();
         
     }
+    
+       
         
     
 

@@ -9,6 +9,7 @@ public interface SportInterface {
     
     public abstract SportDTO addNewSport(SportDTO newSportDTO);
     public abstract List<SportDTO> seeAllSports();
-    public abstract SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO);
+    public abstract SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) throws Exception;
+
     
 }
