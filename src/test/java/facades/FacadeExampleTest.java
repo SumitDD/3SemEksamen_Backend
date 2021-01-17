@@ -20,7 +20,7 @@ import security.errorhandling.AuthenticationException;
 public class FacadeExampleTest {
 
     private static EntityManagerFactory emf;
-    private static UserFacade facade;
+    private static SportFacade facade;
     private static User user;
     private static User admin;
     private static User both;
@@ -31,7 +31,7 @@ public class FacadeExampleTest {
     @BeforeAll
     public static void setUpClass() {
        emf = EMF_Creator.createEntityManagerFactoryForTest();
-       facade = UserFacade.getUserFacade(emf);
+       facade = SportFacade.getSportFacade(emf);
     }
 
     @AfterAll
