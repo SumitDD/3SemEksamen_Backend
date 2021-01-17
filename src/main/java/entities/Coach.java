@@ -30,7 +30,7 @@ public class Coach implements Serializable {
     private String email;
     private String phone;
     
-    @OneToMany(mappedBy = "coach", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "coach")
     private List<SportTeam> sportsTeams;
 
     public Coach(String name, String email, String phone) {

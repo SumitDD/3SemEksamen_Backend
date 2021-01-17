@@ -4,19 +4,12 @@
   <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <!--    <class>entities.RenameMe</class>-->
-    <class>entities.Coach</class>
-    <class>entities.MemberInfo</class>
-    <class>entities.RenameMe</class>
-    <class>entities.Role</class>
-    <class>entities.Sport</class>
-    <class>entities.SportTeam</class>
-    <class>entities.User</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- DO NOT remove the line below. It's not set by the  entityUtils.EMF_Creator -->
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="eclipselink.canonicalmodel.subpackage" value="xx345y657"/>
-      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <!-- You can raise the logging level to one of the following values CONFIG, FINE, FINER, FINEST, ALL for better,
                  but also more verbose, log-info 
                  NOTE in production the values will be set to WARNING to report only potential serious problems
@@ -25,7 +18,7 @@
       <property name="eclipselink.logging.level.sql" value="INFO"/>
       <property name="eclipselink.logging.parameters" value="true"/>
       <!-- In PRODUCTION the values below, will be overriden by utils.EMF_Creator -->
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/startcode?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/startkode?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="dev"/>
       <property name="javax.persistence.jdbc.password" value="ax2"/>
     </properties>
@@ -35,14 +28,6 @@
     <!-- DO NOT RENAME THE PERSISTENCE UNIT -->
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <!--            <class>entities.RenameMe</class>-->
-    <class>entities.Coach</class>
-    <class>entities.MemberInfo</class>
-    <class>entities.Player</class>
-    <class>entities.RenameMe</class>
-    <class>entities.Role</class>
-    <class>entities.Sport</class>
-    <class>entities.SportTeam</class>
-    <class>entities.User</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
