@@ -78,8 +78,6 @@ public class SportFacade implements SportInterface {
         
     }
 
-
-
     @Override
     public SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) throws Exception {
         EntityManager em = emf.createEntityManager();
@@ -98,6 +96,25 @@ public class SportFacade implements SportInterface {
         
         return new SportTeamDTO(sportTeam);
     }
+
+    @Override
+    public List<SportTeamDTO> seeAllSportTeams() throws Exception {
+        EntityManager em = emf.createEntityManager();
+        List<SportTeamDTO> allSportTeamDTO = new ArrayList();
+        //TypedQuery query = em.createQuery("Select u FROM User u JOIN u.phones p WHERE p.Number =:number", User.class);
+        TypedQuery query = em.createQuery("SELECT s FROM SportTeam s", SportTeam.class);
+        List<SportTeam> allSportTeams = query.getResultList();
+        System.out.println(allSportTeams);
+        for (SportTeam SportTeam : allSportTeams) {
+            allSportTeamDTO.add(new SportTeamDTO(SportTeam));
+            
+        }
+        return allSportTeamDTO;
+        
+    }
+
+ 
+   
 
  
 

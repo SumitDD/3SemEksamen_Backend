@@ -137,6 +137,12 @@ public class FacadeExampleTest {
         String expected = "u19";
         assertEquals(expected, sportTeamDTO.teamName);
     }
+    @Test
+    public void testGetAllSportTeams() throws Exception{
+        List<SportTeamDTO> allSportTeams = facade.seeAllSportTeams();
+        int expected = 2;
+        assertEquals(expected, allSportTeams.size());
+    }
     
     
     

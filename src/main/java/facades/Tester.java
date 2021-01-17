@@ -76,6 +76,8 @@ public class Tester {
       SportTeam st = new SportTeam(6000, "u16", 10, 14);
     st.addSport(sport);
     SportTeamDTO std = sf.addSportTeam(new SportTeamDTO(st));
+    List<SportTeamDTO> all = sf.seeAllSportTeams();
+    
    
     }
     
