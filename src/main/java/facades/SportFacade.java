@@ -1,19 +1,21 @@
 package facades;
 
+import entities.Sport;
 import entities.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import security.errorhandling.AuthenticationException;
+import sportsDTO.NewSportDTO;
 
 /**
  * @author lam@cphbusiness.dk
  */
-public class UserFacade {
+public class SportFacade {
 
     private static EntityManagerFactory emf;
-    private static UserFacade instance;
+    private static SportFacade instance;
 
-    private UserFacade() {
+    private SportFacade() {
     }
 
     /**
@@ -21,10 +23,10 @@ public class UserFacade {
      * @param _emf
      * @return the instance of this facade.
      */
-    public static UserFacade getUserFacade(EntityManagerFactory _emf) {
+    public static SportFacade getSportFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
-            instance = new UserFacade();
+            instance = new SportFacade();
         }
         return instance;
     }
@@ -42,5 +44,24 @@ public class UserFacade {
         }
         return user;
     }
+    
+    public NewSportDTO addNewSport(NewSportDTO newSportDTO){    
+        EntityManager em = emf.createEntityManager();
+        Sport sport = em.find(Sport.class, newSportDTO.name);
+        
+        if(sport == null){
+            sport = new Sport(newSportDTO.name, newSportDTO.description);
+        }
+        em.getTransaction().begin();
+        em.persist(sport);
+        em.getTransaction().commit();
+        
+        return new NewSportDTO(sport);
+
+        
+        
+    }
+
+
 
 }
