@@ -25,10 +25,10 @@ public class SportTeam implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int pricePerYear;
+    
     private String teamName;
+    private int pricePerYear;
+    
     private int minAge;
     private int maxAge;
     
@@ -122,14 +122,6 @@ public class SportTeam implements Serializable {
         this.maxAge = maxAge;
     }
     
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 
     

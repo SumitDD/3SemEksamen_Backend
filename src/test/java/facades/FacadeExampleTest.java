@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import security.errorhandling.AuthenticationException;
 import sportsDTO.SportDTO;
+import sportsDTO.SportTeamDTO;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
@@ -30,7 +31,8 @@ public class FacadeExampleTest {
     private static User user;
     private static User admin;
     private static User both;
-
+    private static SportTeam sportTeam2, sportTeam1;
+    private static Sport sport, sport2;
     public FacadeExampleTest() {
     }
 
@@ -45,17 +47,19 @@ public class FacadeExampleTest {
     user = new User("user", "testuser", "@user", "415145415", 55);
     admin = new User("admin", "testadmin", "@admin", "5555", 5);
     both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
-    
+    sport = new Sport("Volley", "volley");
 
     MemberInfo memberInfo = new MemberInfo();
     Coach coach = new Coach("jens", "@jens", "55555");
-    SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
-    Sport sport = new Sport("Fodbold", "sport med en bold");
+    sportTeam1 = new SportTeam(500, "aholdet", 15, 18);
+    sport2 = new Sport("Fodbold", "sport med en bold");
+    sportTeam2 = new SportTeam(5000, "u19", 16, 19);
+    sportTeam2.addSport(sport);
     
     user.addMemberInfo(memberInfo);
-    sportTeam.addMemberInfo(memberInfo);
-    coach.addSportTeam(sportTeam);
-    sport.addSportTeam(sportTeam);
+    sportTeam1.addMemberInfo(memberInfo);
+    coach.addSportTeam(sportTeam1);
+    sport.addSportTeam(sportTeam1);
     
     // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // This breaks one of the MOST fundamental security rules in that it ships with default users and passwords
@@ -85,7 +89,8 @@ public class FacadeExampleTest {
     em.persist(both);
 
 
-    em.persist(sportTeam);
+    em.persist(sportTeam1);
+    em.persist(sportTeam2);
     em.persist(coach);
     em.getTransaction().commit();
     }
@@ -116,16 +121,24 @@ public class FacadeExampleTest {
 
     @Test
     public void testAddNewSport(){
-        Sport sport = new Sport("VOlley", "volley");
+     
         SportDTO sDTO = new SportDTO(sport);
         SportDTO newSport = facade.addNewSport(sDTO);
-        assertEquals(newSport.name, "VOlley");
+        assertEquals(newSport.name, "Volley");
     }
     @Test
     public void testGetAllSports(){
         List<SportDTO> sports = facade.seeAllSports();
-        assertEquals(sports.size(), 2);
+        assertEquals(sports.size(), 1);
     }
+    @Test
+    public void testAddSportTeam() throws Exception{
+        SportTeamDTO sportTeamDTO = facade.addSportTeam(new SportTeamDTO(sportTeam2));
+        String expected = "u19";
+        assertEquals(expected, sportTeamDTO.teamName);
+    }
+    
+    
     
 
 

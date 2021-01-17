@@ -15,12 +15,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import sportsDTO.SportDTO;
+import sportsDTO.SportTeamDTO;
 import utils.EMF_Creator;
 
 
 public class Tester {
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
  
@@ -34,14 +35,17 @@ public class Tester {
     Coach coach = new Coach("jens", "@jens", "55555");
     SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
     Sport sport = new Sport("Fodbold", "sport med en bold");
-
+    
+    SportFacade sf = SportFacade.getSportFacade(emf);
     
     user.addMemberInfo(memberInfo);
     sportTeam.addMemberInfo(memberInfo);
     sportTeam.addCoach(coach);
     sportTeam.addSport(sport);
     
+  
     
+   
     
     // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // This breaks one of the MOST fundamental security rules in that it ships with default users and passwords
@@ -62,13 +66,16 @@ public class Tester {
     em.persist(user);
     em.persist(admin);
     em.persist(sportTeam);
+    em.persist(sport);
     em.getTransaction().commit();
     
     System.out.println("PW: " + user.getUserPass());
     System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
     System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
     System.out.println("Created TEST Users");
-    
+      SportTeam st = new SportTeam(6000, "u16", 10, 14);
+    st.addSport(sport);
+    SportTeamDTO std = sf.addSportTeam(new SportTeamDTO(st));
    
     }
     

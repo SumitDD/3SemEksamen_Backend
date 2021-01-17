@@ -21,10 +21,12 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import sportsDTO.SportDTO;
+import sportsDTO.SportTeamDTO;
 import utils.EMF_Creator;
 import utils.SetupTestUsers;
 
@@ -107,6 +109,14 @@ public class DemoResource {
     public String allSports(String sportName) {
         SportDTO sportDTO = GSON.fromJson(sportName, SportDTO.class);
         SportDTO sDTO = FACADE.addNewSport(sportDTO);
+        return GSON.toJson(sDTO);
+    }
+    @Path("addsportteam")
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    public String addSportTeam(String sportTeamName) throws Exception {
+        SportTeamDTO sportTeamDTO = GSON.fromJson(sportTeamName, SportTeamDTO.class);
+        SportTeamDTO sDTO = FACADE.addSportTeam(sportTeamDTO);
         return GSON.toJson(sDTO);
     }
 

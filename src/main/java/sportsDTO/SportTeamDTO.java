@@ -10,12 +10,15 @@ public class SportTeamDTO {
     public String teamName;
     public int minAge;
     public int maxAge;
-
+    public String sport;
+    
     public SportTeamDTO(SportTeam sportTeam) {
         this.pricePerYear = sportTeam.getPricePerYear();
         this.teamName = sportTeam.getTeamName();
         this.minAge = sportTeam.getMinAge();
         this.maxAge = sportTeam.getMaxAge();
+        this.sport = sportTeam.getSport().getName();
+        
     }
     
     

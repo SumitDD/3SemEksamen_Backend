@@ -1,6 +1,7 @@
 package facades;
 
 import entities.Sport;
+import entities.SportTeam;
 import entities.User;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,22 @@ public class SportFacade implements SportInterface {
 
 
     @Override
-    public SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        System.out.println("22222");
+        Sport sport = em.find(Sport.class, sportTeamDTO.sport);
+        System.out.println("333333");
+        if(sport == null){
+            throw new Exception("Sporten findes ikke");
+        }
+        SportTeam sportTeam = new SportTeam(sportTeamDTO.pricePerYear, sportTeamDTO.teamName, sportTeamDTO.minAge, sportTeamDTO.maxAge);
+        sport = em.find(Sport.class, sportTeamDTO.sport);
+        sportTeam.addSport(sport);
+        em.getTransaction().begin();
+        em.merge(sportTeam);
+        em.getTransaction().commit();
+        
+        return new SportTeamDTO(sportTeam);
     }
 
  
