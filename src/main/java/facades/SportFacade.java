@@ -1,5 +1,6 @@
 package facades;
 
+import entities.MemberInfo;
 import entities.Sport;
 import entities.SportTeam;
 import entities.User;
@@ -112,6 +113,21 @@ public class SportFacade implements SportInterface {
         return allSportTeamDTO;
         
     }
+
+    @Override
+    public SportTeamDTO deleteSportTeam(String teamName) throws Exception {
+        EntityManager em = emf.createEntityManager();
+        SportTeam sportTeam = em.find(SportTeam.class, teamName);
+           for (MemberInfo m : sportTeam.getMemberInfos()) {
+                em.remove(m);
+            }
+        em.getTransaction().begin();
+        em.remove(sportTeam);
+        em.getTransaction().commit();
+        return new SportTeamDTO(sportTeam); 
+    }
+    
+    
 
  
    

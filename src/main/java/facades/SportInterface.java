@@ -11,5 +11,5 @@ public interface SportInterface {
     public abstract List<SportDTO> seeAllSports();
     public abstract SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) throws Exception;
     public abstract List<SportTeamDTO> seeAllSportTeams() throws Exception;
-    
+    public abstract SportTeamDTO deleteSportTeam(String teamName) throws Exception;
 }

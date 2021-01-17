@@ -206,19 +206,28 @@ public class RenameMeResourceTest {
                 .post("/sport/addsport/")
                 .then();
     }
+    
     @Test
     public void testGetAllSportTeams(){
             SportTeamDTO sDTO = new SportTeamDTO(sportTeam);
             SportTeamDTO sDTO2 = new SportTeamDTO(sportTeam1);
                 given()
                 .contentType("application/json").when()
-                .get("/sport/allsportteams").then()
-                
+                .get("/sport/allsportteams").then()      
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("pricePerYear", hasItems(sDTO.pricePerYear, sDTO2.pricePerYear));
-          
-                 
-        
+                .body("pricePerYear", hasItems(sDTO2.pricePerYear));
+
+    }
+    @Test
+    public void testDeleteSportTeam() {
+     
+            given()
+                .contentType("application/json")             
+                .when()
+                .delete("/sport/deletesportteam/" + sportTeam.getTeamName())
+                .then()
+                .statusCode(HttpStatus.OK_200.getStatusCode());
+                
     }
        
         

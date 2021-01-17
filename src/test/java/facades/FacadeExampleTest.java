@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import security.errorhandling.AuthenticationException;
 import sportsDTO.SportDTO;
@@ -140,8 +141,15 @@ public class FacadeExampleTest {
     @Test
     public void testGetAllSportTeams() throws Exception{
         List<SportTeamDTO> allSportTeams = facade.seeAllSportTeams();
-        int expected = 2;
+        int expected = 1;
         assertEquals(expected, allSportTeams.size());
+    }
+    @Test
+    @Order(5)
+    public void testDeleteSport() throws Exception{
+        SportTeamDTO sportTeamDTO = facade.deleteSportTeam(sportTeam1.getTeamName());
+        String expected = "aholdet";
+        assertEquals(expected, sportTeamDTO.teamName);
     }
     
     

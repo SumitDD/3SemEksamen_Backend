@@ -77,7 +77,7 @@ public class Tester {
     st.addSport(sport);
     SportTeamDTO std = sf.addSportTeam(new SportTeamDTO(st));
     List<SportTeamDTO> all = sf.seeAllSportTeams();
-    
+   // SportTeamDTO s = sf.deleteSportTeam("aholdet");
    
     }
     
