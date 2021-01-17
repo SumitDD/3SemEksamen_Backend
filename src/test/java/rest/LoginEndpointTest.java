@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import utils.EMF_Creator;
 
-//Disabled
+@Disabled
 public class LoginEndpointTest {
 
     private static final int SERVER_PORT = 7777;
@@ -68,14 +68,17 @@ public class LoginEndpointTest {
             //Delete existing users and roles to get a "fresh" database
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
-
+            
+             User user = new User("user", "testuser", "@user", "415145415", 55);
+    User admin = new User("admin", "testadmin", "@admin", "5555", 5);
+    User both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            User user = new User("user", "test");
+      
             user.addRole(userRole);
-            User admin = new User("admin", "test");
+          
             admin.addRole(adminRole);
-            User both = new User("user_admin", "test");
+            
             both.addRole(userRole);
             both.addRole(adminRole);
             em.persist(userRole);

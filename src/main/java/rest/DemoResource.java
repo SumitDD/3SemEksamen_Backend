@@ -2,8 +2,10 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import entities.Sport;
 import entities.User;
 import facades.FacadeExample;
+import facades.SportFacade;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,21 +20,23 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import sportsDTO.SportDTO;
 import utils.EMF_Creator;
 import utils.SetupTestUsers;
 
 /**
  * @author lam@cphbusiness.dk
  */
-@Path("info")
+@Path("sport")
 public class DemoResource {
     
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
     private static final ExecutorService ES = Executors.newCachedThreadPool();
-    private static final FacadeExample FACADE = FacadeExample.getFacadeExample(EMF);
+    private static final SportFacade FACADE = SportFacade.getSportFacade(EMF);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static String cachedResponse;
     @Context
@@ -81,22 +85,7 @@ public class DemoResource {
         return "{\"msg\": \"Hello to (admin) User: " + thisuser + "\"}";
     }
     
-    @Path("parrallel")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getStarWarsParrallel() throws InterruptedException, ExecutionException, TimeoutException {
-        String result = fetcher.StarWarsFetcher.responseFromExternalServersParrallel(ES, GSON);
-        cachedResponse = result;
-        return result;
-    }
 
-    @Path("cached")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getStarWarsCached() throws InterruptedException, ExecutionException, TimeoutException {
-        return cachedResponse;
-    }
-    
     @Path("setUpUsers")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -104,24 +93,23 @@ public class DemoResource {
         SetupTestUsers.setUpUsers();
     }
     
-    @Path("planets")
+    @Path("allsports")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getPlanets() throws InterruptedException, ExecutionException, TimeoutException, IOException {
-        String result = fetcher.StarWarsPlanetFetcher.responseFromExternalServersSequential(ES, GSON);
-        cachedResponse = result;
-        return result;
+    public String allSports() {
+        List<SportDTO> allSports = FACADE.seeAllSports();
+        return GSON.toJson(allSports);
     }
     
-    @Path("countries")
-    @GET
+    @Path("addsport")
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
-    public String getCountries() throws InterruptedException, ExecutionException, TimeoutException, IOException {
-        String result = fetcher.CountriesFetcher.responseFromExternalServersSequential(ES, GSON);
-        cachedResponse = result;
-        return result;
+    public String allSports(String sportName) {
+        SportDTO sportDTO = GSON.fromJson(sportName, SportDTO.class);
+        SportDTO sDTO = FACADE.addNewSport(sportDTO);
+        return GSON.toJson(sDTO);
     }
-    
+
     
     
 }

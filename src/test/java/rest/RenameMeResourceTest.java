@@ -1,6 +1,13 @@
 package rest;
 
+import entities.Coach;
+import entities.MemberInfo;
 import entities.RenameMe;
+import entities.Role;
+import entities.Sport;
+import entities.SportTeam;
+import entities.User;
+import facades.SportFacade;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -20,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import sportsDTO.SportDTO;
 //Uncomment the line below, to temporarily disable this test
 @Disabled
 
@@ -32,7 +40,7 @@ public class RenameMeResourceTest {
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
-
+    private static EntityManager em;
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -43,12 +51,67 @@ public class RenameMeResourceTest {
         //This method must be called before you request the EntityManagerFactory
         EMF_Creator.startREST_TestWithDB();
         emf = EMF_Creator.createEntityManagerFactoryForTest();
+        em = emf.createEntityManager();
 
         httpServer = startServer();
         //Setup RestAssured
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
+        
+ 
+    
+    User user = new User("user", "testuser", "@user", "415145415", 55);
+    User admin = new User("admin", "testadmin", "@admin", "5555", 5);
+    User both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
+
+    
+    MemberInfo memberInfo = new MemberInfo();
+    System.out.println(memberInfo.getPayed() +  ", " + memberInfo.getDatePayed());
+    Coach coach = new Coach("jens", "@jens", "55555");
+    SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
+    Sport sport = new Sport("Fodbold", "sport med en bold");
+    
+
+    user.addMemberInfo(memberInfo);
+    System.out.println(memberInfo);
+    sportTeam.addMemberInfo(memberInfo);
+    coach.addSportTeam(sportTeam);
+    sport.addSportTeam(sportTeam);
+    
+    
+    // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // This breaks one of the MOST fundamental security rules in that it ships with default users and passwords
+    // CHANGE the three passwords below, before you uncomment and execute the code below
+    // Also, either delete this file, when users are created or rename and add to .gitignore
+    // Whatever you do DO NOT COMMIT and PUSH with the real passwords
+
+
+
+    if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
+      throw new UnsupportedOperationException("You have not changed the passwords");
+
+    em.getTransaction().begin();
+    Role userRole = new Role("user");
+    Role adminRole = new Role("admin");
+    user.addRole(userRole);
+    admin.addRole(adminRole);
+    both.addRole(userRole);
+    both.addRole(adminRole);
+    em.persist(userRole);
+    em.persist(adminRole);
+    em.persist(user);
+    em.persist(admin);
+    em.persist(both);
+    em.persist(sport);
+    em.persist(sportTeam);
+    em.persist(coach);
+    em.getTransaction().commit();
+    System.out.println("PW: " + user.getUserPass());
+    System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
+    System.out.println("Testing user with wrong password: " + user.verifyPassword("test1"));
+    System.out.println("Created TEST Users");
+    
     }
 
     @AfterAll
@@ -94,35 +157,14 @@ public class RenameMeResourceTest {
                 .body("msg", equalTo("Hello anonymous"));
     }
 
-    
     @Test
-    @Order(1)
-    public void testParrallel() throws Exception {
+    public void testAddNewSport() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/info/parrallel").then()
+                .get("/sport/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("peopleName", equalTo("Luke Skywalker"))
-                .body("planetName", equalTo("Yavin IV"))
-                .body("speciesName", equalTo("Ewok"))
-                .body("starshipName", equalTo("Star Destroyer"))
-                .body("vehicleName", equalTo("Sand Crawler"));
+                .body("msg", equalTo("Hello anonymous"));
+    }
 
- 
-    }
-    @Test
-    @Order(2)
-    public void testCached() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("/info/cached").then()            
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("peopleName", equalTo("Luke Skywalker"))
-                .body("planetName", equalTo("Yavin IV"))
-                .body("speciesName", equalTo("Ewok"))
-                .body("starshipName", equalTo("Star Destroyer"))
-                .body("vehicleName", equalTo("Sand Crawler"));
-    }
 }

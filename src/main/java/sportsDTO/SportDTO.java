@@ -8,12 +8,12 @@ package sportsDTO;
 import entities.Sport;
 
 
-public class NewSportDTO {
+public class SportDTO {
     
     public String name;
     public String description;
 
-    public NewSportDTO(Sport sport) {
+    public SportDTO(Sport sport) {
         this.name = sport.getName();
         this.description = sport.getDescription();
     }
