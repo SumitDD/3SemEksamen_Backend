@@ -25,6 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.Test;
 import sportsDTO.SportDTO;
 import sportsDTO.SportTeamDTO;
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 
 public class RenameMeResourceTest {
 
@@ -48,7 +49,7 @@ public class RenameMeResourceTest {
     private static EntityManagerFactory emf;
     private static EntityManager em;
     private static Sport sport, sport2, newSport;
-    private static SportTeam sportTeam1;
+    private static SportTeam sportTeam1, sportTeam;
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -75,7 +76,7 @@ public class RenameMeResourceTest {
 
     MemberInfo memberInfo = new MemberInfo();
     Coach coach = new Coach("jens", "@jens", "55555");
-    SportTeam sportTeam = new SportTeam(500, "u20", 15, 18);
+    sportTeam = new SportTeam(500, "u20", 15, 18);
     sport = new Sport("Fodbold", "sport med en bold");
     sport2 = new Sport("Håndbold", "mandesport");
     user.addMemberInfo(memberInfo);
@@ -204,9 +205,21 @@ public class RenameMeResourceTest {
                 .when()
                 .post("/sport/addsport/")
                 .then();
+    }
+    @Test
+    public void testGetAllSportTeams(){
+            SportTeamDTO sDTO = new SportTeamDTO(sportTeam);
+            SportTeamDTO sDTO2 = new SportTeamDTO(sportTeam1);
+                given()
+                .contentType("application/json").when()
+                .get("/sport/allsportteams").then()
+                
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("pricePerYear", hasItems(sDTO.pricePerYear, sDTO2.pricePerYear));
+          
+                 
         
     }
-    
        
         
     

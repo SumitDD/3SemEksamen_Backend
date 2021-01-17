@@ -119,7 +119,14 @@ public class DemoResource {
         SportTeamDTO sDTO = FACADE.addSportTeam(sportTeamDTO);
         return GSON.toJson(sDTO);
     }
-
+    @Path("allsportteams")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getAllSportTeams() throws Exception {
+        
+        List<SportTeamDTO> allSportTeams = FACADE.seeAllSportTeams();
+        return GSON.toJson(allSportTeams);
+    }
     
     
 }
