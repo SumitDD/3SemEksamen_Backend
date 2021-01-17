@@ -158,19 +158,19 @@ public class RenameMeResourceTest {
                 .body("msg", equalTo("Hello anonymous"));
     }
 
-    @Test
-    public void testGetAllSports() throws Exception {
-        
-        SportDTO sportDTO = new SportDTO(sport);
-        SportDTO sportDTO2 = new SportDTO(sport2); 
-        
-        given()
-                .contentType("application/json").when()
-                .get("/sport/allsports").then()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("name", equalTo(sport.getName()));
-      
-    }
+//    @Test
+//    public void testGetAllSports() throws Exception {
+//        
+//        SportDTO sportDTO = new SportDTO(sport);
+//        SportDTO sportDTO2 = new SportDTO(sport2); 
+//        
+//        given()
+//                .contentType("application/json").when()
+//                .get("/sport/allsports").then()
+//                .statusCode(HttpStatus.OK_200.getStatusCode())
+//                .body("name", equalTo(sport.getName()));
+//      
+//    }
     @Test
     public void testAddNewSport(){
         newSport = new Sport("gaming", "det sjovt");

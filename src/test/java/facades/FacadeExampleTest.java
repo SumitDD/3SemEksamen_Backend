@@ -42,9 +42,9 @@ public class FacadeExampleTest {
     em = emf.createEntityManager();
     facade = SportFacade.getSportFacade(emf);
     
-    User user = new User("user", "testuser", "@user", "415145415", 55);
-    User admin = new User("admin", "testadmin", "@admin", "5555", 5);
-    User both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
+    user = new User("user", "testuser", "@user", "415145415", 55);
+    admin = new User("admin", "testadmin", "@admin", "5555", 5);
+    both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
     
 
     MemberInfo memberInfo = new MemberInfo();
@@ -83,7 +83,7 @@ public class FacadeExampleTest {
     em.persist(user);
     em.persist(admin);
     em.persist(both);
-    em.persist(sport);
+
 
     em.persist(sportTeam);
     em.persist(coach);
