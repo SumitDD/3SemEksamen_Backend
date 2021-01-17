@@ -121,7 +121,7 @@ public class FacadeExampleTest {
         SportDTO newSport = facade.addNewSport(sDTO);
         assertEquals(newSport.name, "VOlley");
     }
-        @Test
+    @Test
     public void testGetAllSports(){
         List<SportDTO> sports = facade.seeAllSports();
         assertEquals(sports.size(), 2);

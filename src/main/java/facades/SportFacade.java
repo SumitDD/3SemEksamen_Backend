@@ -51,9 +51,10 @@ public class SportFacade implements SportInterface {
     @Override
     public SportDTO addNewSport(SportDTO newSportDTO){    
         EntityManager em = emf.createEntityManager();
-
-        Sport sport = new Sport(newSportDTO.name, newSportDTO.description);
-        
+        Sport sport = em.find(Sport.class, newSportDTO.name); 
+        if(sport == null){
+            sport = new Sport(newSportDTO.name, newSportDTO.description);
+        }
         em.getTransaction().begin();
         em.persist(sport);
         em.getTransaction().commit();
@@ -76,10 +77,14 @@ public class SportFacade implements SportInterface {
         
     }
 
+
+
     @Override
-    public SportTeamDTO addNewSportTeam() {
+    public SportTeamDTO addSportTeam(SportTeamDTO sportTeamDTO) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+ 
 
 
 

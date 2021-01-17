@@ -35,10 +35,10 @@ public class SportTeam implements Serializable {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Sport sport;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Coach coach;
     
-    @OneToMany(mappedBy = "sportTeam")
+    @OneToMany(mappedBy = "sportTeam", cascade = CascadeType.PERSIST)
     private List<MemberInfo> memberInfos;
 
     public SportTeam(int pricePerYear, String teamName, int minAge, int maxAge) {

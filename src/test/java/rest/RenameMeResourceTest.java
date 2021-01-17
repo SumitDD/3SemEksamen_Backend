@@ -2,7 +2,7 @@ package rest;
 
 import entities.Coach;
 import entities.MemberInfo;
-import entities.RenameMe;
+
 import entities.Role;
 import entities.Sport;
 import entities.SportTeam;
@@ -13,6 +13,7 @@ import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
 import java.net.URI;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
@@ -20,7 +21,11 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,18 +34,19 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import sportsDTO.SportDTO;
 //Uncomment the line below, to temporarily disable this test
-@Disabled
+//@Disabled
 
 public class RenameMeResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static RenameMe r1, r2;
+
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
     private static EntityManagerFactory emf;
     private static EntityManager em;
+    private static Sport sport, sport2, newSport;
     static HttpServer startServer() {
         ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
@@ -58,26 +64,22 @@ public class RenameMeResourceTest {
         RestAssured.baseURI = SERVER_URL;
         RestAssured.port = SERVER_PORT;
         RestAssured.defaultParser = Parser.JSON;
-        
+
  
-    
     User user = new User("user", "testuser", "@user", "415145415", 55);
     User admin = new User("admin", "testadmin", "@admin", "5555", 5);
     User both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
+  
 
-    
     MemberInfo memberInfo = new MemberInfo();
-    System.out.println(memberInfo.getPayed() +  ", " + memberInfo.getDatePayed());
     Coach coach = new Coach("jens", "@jens", "55555");
     SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
-    Sport sport = new Sport("Fodbold", "sport med en bold");
-    
-
+    sport = new Sport("Fodbold", "sport med en bold");
+    sport2 = new Sport("Håndbold", "mandesport");
     user.addMemberInfo(memberInfo);
-    System.out.println(memberInfo);
     sportTeam.addMemberInfo(memberInfo);
-    coach.addSportTeam(sportTeam);
-    sport.addSportTeam(sportTeam);
+    sportTeam.addCoach(coach);
+    sportTeam.addSport(sport);
     
     
     // IMPORTAAAAAAAAAANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -105,7 +107,6 @@ public class RenameMeResourceTest {
     em.persist(both);
     em.persist(sport);
     em.persist(sportTeam);
-    em.persist(coach);
     em.getTransaction().commit();
     System.out.println("PW: " + user.getUserPass());
     System.out.println("Testing user with OK password: " + user.verifyPassword("test"));
@@ -143,7 +144,7 @@ public class RenameMeResourceTest {
 
     @Test
     public void testServerIsUp() {
-        given().when().get("/info").then().statusCode(200);
+        given().when().get("/sport").then().statusCode(200);
     }
 
     //This test assumes the database contains two rows
@@ -151,20 +152,43 @@ public class RenameMeResourceTest {
     public void testDummyMsg() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/info/").then()
+                .get("/sport/").then()
                 .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
+                
                 .body("msg", equalTo("Hello anonymous"));
     }
 
     @Test
-    public void testAddNewSport() throws Exception {
+    public void testGetAllSports() throws Exception {
+        
+        SportDTO sportDTO = new SportDTO(sport);
+        SportDTO sportDTO2 = new SportDTO(sport2); 
+        
         given()
-                .contentType("application/json")
-                .get("/sport/").then()
-                .assertThat()
+                .contentType("application/json").when()
+                .get("/sport/allsports").then()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("Hello anonymous"));
+                .body("name", equalTo(sport.getName()));
+      
     }
+    @Test
+    public void testAddNewSport(){
+        newSport = new Sport("gaming", "det sjovt");
+        EntityManagerFactory emf = EMF_Creator.createEntityManagerFactoryForTest();
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(newSport);
+        em.getTransaction().commit();
+     
+            given()
+                .contentType("application/json")
+                .body(new SportDTO(newSport))
+                .when()
+                .post("/sport/addsport/")
+                .then();
+        
+    }
+        
+    
 
 }
