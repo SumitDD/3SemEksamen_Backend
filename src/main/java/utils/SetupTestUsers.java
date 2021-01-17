@@ -3,7 +3,6 @@ package utils;
 
 import entities.Coach;
 import entities.MemberInfo;
-import entities.Player;
 import entities.Role;
 import entities.Sport;
 import entities.SportTeam;
@@ -19,13 +18,15 @@ public class SetupTestUsers {
     EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
     EntityManager em = emf.createEntityManager();
     
-    Player player = new Player("sumit", "@sumit", "11111", 21);
+    User user = new User("user", "testuser", "@user", "415145415", 55);
+    User admin = new User("admin", "testadmin", "@admin", "5555", 5);
+    User both = new User("user_admin", "testuseradmin", "@both", "4568686865451", 4);
     MemberInfo memberInfo = new MemberInfo();
     Coach coach = new Coach("jens", "@jens", "55555");
     SportTeam sportTeam = new SportTeam(500, "aholdet", 15, 18);
     Sport sport = new Sport("Fodbold", "sport med en bold");
     
-    player.addMemberInfo(memberInfo);
+    user.addMemberInfo(memberInfo);
     sportTeam.addMemberInfo(memberInfo);
     coach.addSportTeam(sportTeam);
     sport.addSportTeam(sportTeam);
@@ -36,9 +37,7 @@ public class SetupTestUsers {
     // Also, either delete this file, when users are created or rename and add to .gitignore
     // Whatever you do DO NOT COMMIT and PUSH with the real passwords
 
-    User user = new User("user", "testuser");
-    User admin = new User("admin", "testadmin");
-    User both = new User("user_admin", "testuseradmin");
+
 
     if(admin.getUserPass().equals("test")||user.getUserPass().equals("test")||both.getUserPass().equals("test"))
       throw new UnsupportedOperationException("You have not changed the passwords");
@@ -56,7 +55,7 @@ public class SetupTestUsers {
     em.persist(admin);
     em.persist(both);
     em.persist(sport);
-    em.persist(player);
+   
     em.persist(sportTeam);
     em.persist(coach);
     em.getTransaction().commit();

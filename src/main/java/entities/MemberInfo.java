@@ -31,7 +31,7 @@ public class MemberInfo implements Serializable {
     private Date datePayed;
     
     @ManyToOne
-    private Player player;
+    private User user;
     
     @ManyToOne
     private SportTeam sportTeam;
@@ -44,14 +44,14 @@ public class MemberInfo implements Serializable {
 //    public MemberInfo() {
 //    }
 
-    public Player getPlayer() {
-        return player;
+    public User getUser() {
+        return user;
     }
 
-    public void addPlayer(Player player) {
-        if(player != null){
-           player.getMemberInfos().add(this);
-           this.player = player;  
+    public void addUser(User user) {
+        if(user != null){
+           user.getMemberInfos().add(this);
+           this.user = user;  
         }
     }
 
@@ -61,6 +61,9 @@ public class MemberInfo implements Serializable {
 
     public void setSportTeam(SportTeam sportTeam) {
         this.sportTeam = sportTeam;
+        if(sportTeam != null){
+            sportTeam.getMemberInfos().add(this);
+        }
     }
 
     public Boolean getPayed() {

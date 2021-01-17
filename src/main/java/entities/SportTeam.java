@@ -32,13 +32,13 @@ public class SportTeam implements Serializable {
     private int minAge;
     private int maxAge;
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Sport sport;
     
     @ManyToOne
     private Coach coach;
     
-    @OneToMany(mappedBy = "sportTeam", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "sportTeam")
     private List<MemberInfo> memberInfos;
 
     public SportTeam(int pricePerYear, String teamName, int minAge, int maxAge) {
@@ -81,8 +81,8 @@ public class SportTeam implements Serializable {
     }
 
     public void addMemberInfo(MemberInfo memberInfo) {
+        this.memberInfos.add(memberInfo);
         if(memberInfo != null){
-            this.memberInfos.add(memberInfo);
             memberInfo.setSportTeam(this);
         }
     }

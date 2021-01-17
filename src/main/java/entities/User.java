@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,6 +38,13 @@ public class User implements Serializable {
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
 
+    private String email;
+    private String phone;
+    private int age;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<MemberInfo> memberInfos;
+
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
       return null;
@@ -54,12 +63,14 @@ public class User implements Serializable {
         return(BCrypt.checkpw(pw, this.userPass));
     }
 
-  public User(String userName, String userPass) {
-    this.userName = userName;
-
-    this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
-  }
-
+    public User(String userName, String userPass, String email, String phone, int age) {
+        this.userName = userName;
+        this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+        this.email = email;
+        this.phone = phone;
+        this.age = age;
+        memberInfos = new ArrayList();
+    }
 
   public String getUserName() {
     return userName;
@@ -68,6 +79,43 @@ public class User implements Serializable {
   public void setUserName(String userName) {
     this.userName = userName;
   }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public List<MemberInfo> getMemberInfos() {
+        return memberInfos;
+    }
+
+  public void addMemberInfo(MemberInfo memberInfo) {
+        if(memberInfo != null){
+            this.memberInfos.add(memberInfo);
+            memberInfo.addUser(this);
+        }
+    }
+  
+  
 
   public String getUserPass() {
     return this.userPass;

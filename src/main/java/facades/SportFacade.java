@@ -2,15 +2,18 @@ package facades;
 
 import entities.Sport;
 import entities.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import security.errorhandling.AuthenticationException;
-import sportsDTO.NewSportDTO;
+import sportsDTO.SportDTO;
+import sportsDTO.SportTeamDTO;
 
-/**
- * @author lam@cphbusiness.dk
- */
-public class SportFacade {
+
+public class SportFacade implements SportInterface {
 
     private static EntityManagerFactory emf;
     private static SportFacade instance;
@@ -45,21 +48,37 @@ public class SportFacade {
         return user;
     }
     
-    public NewSportDTO addNewSport(NewSportDTO newSportDTO){    
+    @Override
+    public SportDTO addNewSport(SportDTO newSportDTO){    
         EntityManager em = emf.createEntityManager();
-        Sport sport = em.find(Sport.class, newSportDTO.name);
+
+        Sport sport = new Sport(newSportDTO.name, newSportDTO.description);
         
-        if(sport == null){
-            sport = new Sport(newSportDTO.name, newSportDTO.description);
-        }
         em.getTransaction().begin();
         em.persist(sport);
         em.getTransaction().commit();
         
-        return new NewSportDTO(sport);
+        return new SportDTO(sport);
 
+    }
+    @Override
+    public List<SportDTO> seeAllSports(){     
+        EntityManager em = emf.createEntityManager();
+        List<SportDTO> allSports = new ArrayList();
+        TypedQuery query = em.createQuery("SELECT s FROM Sport s", Sport.class);
+        List<Sport> sports = query.getResultList();
+        for (Sport sport : sports) {
+            allSports.add(new SportDTO(sport));
+            
+        }
         
+        return allSports;
         
+    }
+
+    @Override
+    public SportTeamDTO addNewSportTeam() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
