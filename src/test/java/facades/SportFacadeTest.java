@@ -70,13 +70,13 @@ public class SportFacadeTest {
     both.addRole(adminRole);
 
    em.getTransaction().begin();
-//   em.createNativeQuery("DELETE FROM MEMBERINFO").executeUpdate();
-//   em.createNativeQuery("DELETE FROM SPORTTEAM").executeUpdate();
-//   em.createNativeQuery("DELETE FROM SPORT").executeUpdate();
-//   em.createNativeQuery("DELETE FROM COACH").executeUpdate();
-//   em.createNativeQuery("DELETE FROM user_roles").executeUpdate();          
-//   em.createNativeQuery("DELETE FROM roles").executeUpdate();      
-//   em.createNativeQuery("DELETE FROM users").executeUpdate();
+   em.createNativeQuery("DELETE FROM MEMBERINFO").executeUpdate();
+   em.createNativeQuery("DELETE FROM SPORTTEAM").executeUpdate();
+   em.createNativeQuery("DELETE FROM SPORT").executeUpdate();
+   em.createNativeQuery("DELETE FROM COACH").executeUpdate();
+   em.createNativeQuery("DELETE FROM user_roles").executeUpdate();          
+   em.createNativeQuery("DELETE FROM roles").executeUpdate();      
+   em.createNativeQuery("DELETE FROM users").executeUpdate();
   
     em.persist(userRole);
     em.persist(adminRole);
