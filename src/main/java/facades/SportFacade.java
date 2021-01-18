@@ -126,14 +126,6 @@ public class SportFacade implements SportInterface {
         em.getTransaction().commit();
         return new SportTeamDTO(sportTeam); 
     }
-    
-    
-
- 
-   
-
- 
-
 
 
 }

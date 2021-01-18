@@ -24,7 +24,7 @@ import sportsDTO.SportTeamDTO;
 
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
-public class FacadeExampleTest {
+public class SportFacadeTest {
 
     private static EntityManagerFactory emf;
     private static EntityManager em;
@@ -34,7 +34,7 @@ public class FacadeExampleTest {
     private static User both;
     private static SportTeam sportTeam2, sportTeam1;
     private static Sport sport, sport2;
-    public FacadeExampleTest() {
+    public SportFacadeTest() {
     }
 
     @BeforeAll
