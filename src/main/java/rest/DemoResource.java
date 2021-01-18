@@ -139,7 +139,7 @@ public class DemoResource {
         return GSON.toJson(deletedSportTeam);
         
     }
-    
+
 
         
     }
