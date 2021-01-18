@@ -124,16 +124,16 @@ public class SportFacadeTest {
     @Test 
     public void testAddNewSport(){
      
-        SportDTO sDTO = new SportDTO(sport);
+        SportDTO sDTO = new SportDTO(sport2);
         SportDTO newSport = facade.addNewSport(sDTO);
-        String expected = "Fodbold";
+        String expected = "Håndbold";
         assertEquals(newSport.name, expected);
     }
     
     @Test 
     public void testGetAllSports(){
         List<SportDTO> sports = facade.seeAllSports();
-        int expected = 1;
+        int expected = 2;
         assertEquals(sports.size(), expected);
     }
     
