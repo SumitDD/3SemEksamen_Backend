@@ -70,8 +70,8 @@ public class MemberInfo implements Serializable {
         return payed;
     }
 
-    public void setPayed(Boolean payed) {
-        if(!payed)
+    public void setPayed() {
+        if(payed == false)
            this.payed = true;
            this.datePayed = new Date();
     }
